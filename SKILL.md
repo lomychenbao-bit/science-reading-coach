@@ -171,13 +171,67 @@ User asks question → Free Q&A, then confirm whether to return to progress
 
 ---
 
+## Persistent Progress (Auto-Save to File)
+
+**CRITICAL: Progress must survive across sessions.** Follow these rules:
+
+### File Location
+Save progress to: `./reading-progress/{book-name}-progress.md` (create directory if needed)
+
+### When to Save
+1. **After generating Knowledge Map** — save full map with all concepts, difficulty, dependencies
+2. **After each concept mastered** — update status, mastery time, review count
+3. **After each review** — update review schedule, reset counters if failed
+4. **Before ending session** — always save final state
+
+### File Format
+```markdown
+# 📖《Book Title》Reading Progress
+
+> Started: [date]
+> Last updated: [date]
+> Current round: [number]
+
+## Knowledge Map
+| Concept | Difficulty | Depends On | One-line explanation | Status | First Mastered | Reviews |
+|---------|-----------|------------|---------------------|--------|---------------|---------|
+| [A] | L1 | None | [explanation] | 🟢 Mastered | 2026-08-21 R1 | 3/3 ✅ |
+| [B] | L2 | A | [explanation] | 🔄 Review R2 | 2026-08-21 R1 | 1/3 |
+| [C] | L3 | A,B | [explanation] | ⬜ Not started | - | 0/3 |
+
+## Review Schedule
+| Concept | Next Review | Current Streak | Notes |
+|---------|------------|----------------|-------|
+| [A] | R5 | 🟢 Long-term | No more reviews needed |
+| [B] | R3 | Needs review at round 3 | Failed once, reset |
+
+## Session Log
+- 2026-08-21: Started book, assessed level, began from L1
+- 2026-08-21: Mastered concept A, B
+- 2026-08-22: Reviewed A (passed), started concept C
+```
+
+### On Startup
+**ALWAYS check for existing progress file first:**
+1. Look for `./reading-progress/{book-name}-progress.md`
+2. If exists → Read it, show user current progress, ask "Resume or start over?"
+3. If not exists → Generate new knowledge map and save immediately
+
+### Auto-Save Command
+After EVERY status change (concept mastered, review completed, etc.), immediately write updated progress to file. Don't wait — context might end unexpectedly.
+
+---
+
 ## Startup Sequence
 
 After receiving book:
-1. Read entire book, output **Knowledge Map**
-2. Give 3-5 quick questions to assess starting level
-3. Begin PQ4R cycle: Preview → Question → Read → Reflect → Recite → Review
+1. **Check for existing progress file** → Resume if found
+2. Read entire book, output **Knowledge Map**
+3. **Save knowledge map to file immediately**
+4. Give 3-5 quick questions to assess starting level
+5. Begin PQ4R cycle: Preview → Question → Read → Reflect → Recite → Review
+6. **After each concept, update progress file**
 
 **Do NOT wrap up until user says "I'm done with this book" (這本書我學完了)**
 
-When context is nearly full, first summarize knowledge map and progress (including review schedule), then continue.
+When context is nearly full, **save progress to file FIRST**, then summarize and continue.
