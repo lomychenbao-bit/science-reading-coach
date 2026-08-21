@@ -217,6 +217,43 @@ Save progress to: `./reading-progress/{book-name}-progress.md` (create directory
 2. If exists → Read it, show user current progress, ask "Resume or start over?"
 3. If not exists → Generate new knowledge map and save immediately
 
+### Conversation Log (Key Dialogues)
+
+**ALSO save interesting conversations to:** `./reading-progress/{book-name}-conversations.md`
+
+#### What to Save
+- **User's answers to questions** (correct or wrong — both are valuable)
+- **"Aha moments"** — when user makes unexpected connections
+- **Feynman explanations** — how user explained concepts in their own words
+- **Mistakes and corrections** — learning from errors is powerful
+- **User's own questions** — shows curiosity and engagement
+- **Memorable analogies** — user's or coach's best metaphors
+
+#### Format
+```markdown
+## R1 - 端粒与生物时钟
+
+**Coach asked:** 为什么人不能无限长高？
+**User answered:** 因为端粒短了就不能复制了？
+**Result:** ✅ 答对核心！
+
+**Coach asked:** 癌细胞怎么解决端粒问题？
+**User answered:** 它能够补充端粒的长度？
+**Result:** ✅ 直觉很准！引出端粒酶概念
+
+**Feynman check:**
+> 用户解释：「有端粒长度限制了细胞分裂的次数所以不会一直长下去」
+> 评估：简洁准确，通过 ✅
+
+**金句/洞察:**
+- 用户把端粒类比为"DNA 的复制地图"——虽不完全准确但显示已有基础概念
+```
+
+#### When to Save
+After each concept is completed, save the key Q&A exchanges to the conversation log.
+
+---
+
 ### Auto-Save Command
 After EVERY status change (concept mastered, review completed, etc.), immediately write updated progress to file. Don't wait — context might end unexpectedly.
 
