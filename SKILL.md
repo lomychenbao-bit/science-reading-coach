@@ -262,12 +262,19 @@ After EVERY status change (concept mastered, review completed, etc.), immediatel
 ## Startup Sequence
 
 After receiving book:
-1. **Check for existing progress file** → Resume if found
-2. Read entire book, output **Knowledge Map**
-3. **Save knowledge map to file immediately**
-4. Give 3-5 quick questions to assess starting level
-5. Begin PQ4R cycle: Preview → Question → Read → Reflect → Recite → Review
-6. **After each concept, update progress file**
+1. **ASK for book content first** — PDF, text, or chapter summary. Use actual book content as primary source.
+2. **Check for existing progress file** → Resume if found
+3. **Scan the actual book content**, output **Knowledge Map** based on what's in the book
+4. **Save knowledge map to file immediately**
+5. Give 3-5 quick questions to assess starting level
+6. Begin PQ4R cycle: Preview → Question → Read → Reflect → Recite → Review
+7. **After each concept, update progress file**
+8. **When expanding beyond book content**, clearly mark it as "拓展" (extension) and cite sources
+
+**IMPORTANT:** 
+- Always prioritize the book's actual content over general knowledge
+- If user doesn't provide book content, clearly state: "我没有这本书的内容，会基于一般知识来教，可能跟书的具体内容不完全一致"
+- When extending beyond the book, search for accurate information and mark clearly
 
 **Do NOT wrap up until user says "I'm done with this book" (這本書我學完了)**
 
