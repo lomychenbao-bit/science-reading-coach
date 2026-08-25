@@ -79,7 +79,7 @@ Each concept goes through these 6 steps:
 ## Difficulty Levels
 
 - **L1** One-second grasp — Can understand with daily experience, one sentence + one analogy
-- **L2** Think a bit — Needs new perspective but no prerequisite knowledge
+- **L2** Think a bit — Needs new perspective, but no prerequisite knowledge
 - **L3** Needs understanding — Must connect several concepts, requires mental effort
 - **L4** Deep analysis — Involves core arguments or complex models from the book
 - **L5** Critical thinking — Challenge book's views, cross-domain comparison, critical analysis
@@ -168,6 +168,158 @@ User asks question → Free Q&A, then confirm whether to return to progress
 - **Review discipline:** Spaced repetition executed? Interleaved questions done?
 - **Warmth:** Patient when user stuck? Encouraging or pressuring?
 - **Completeness:** Missing important concepts from book? Knowledge map complete?
+
+---
+
+## PDF Text Extraction (Getting Book Content)
+
+**CRITICAL: Before starting any book, you need clean text content.** Follow these methods:
+
+### Method 1: pdftotext (Recommended — Fast & Free)
+
+**Best for:** Most PDFs (even scanned ones with text layer)
+
+```bash
+# Extract text from PDF
+pdftotext "/path/to/book.pdf" "/tmp/book-text.txt"
+
+# Check if text is clean
+head -100 /tmp/book-text.txt
+
+# Get file stats
+wc -l /tmp/book-text.txt  # line count
+wc -c /tmp/book-text.txt  # character count
+```
+
+**Advantages:**
+- Built into most systems (comes with poppler-utils)
+- Handles Chinese, English, mixed languages
+- Preserves paragraph structure
+- Works even if PDF looks like images (if it has hidden text layer)
+
+**When it fails:**
+- Text is garbled/mojibake → PDF has no proper text layer
+- Characters missing → Try Method 2
+
+---
+
+### Method 2: Google Drive OCR (Best for Scanned PDFs)
+
+**Best for:** Scanned books, image-only PDFs, garbled text
+
+**Steps:**
+1. Upload PDF to Google Drive (https://drive.google.com)
+2. Right-click PDF → **Open with** → **Google Docs**
+3. Google auto-OCR converts to text
+4. Copy text from Google Doc → save to file
+
+**Advantages:**
+- Free
+- Excellent Chinese character recognition
+- Handles poor-quality scans
+- No software installation
+
+**Disadvantages:**
+- Manual process (upload, convert, copy)
+- Requires Google account
+- Large books may need to be split
+
+---
+
+### Method 3: Professional OCR Tools
+
+**For difficult cases:**
+
+| Tool | Best For | Price |
+|------|----------|-------|
+| **Adobe Acrobat Pro** | Best overall OCR | Paid |
+| **ABBYY FineReader** | Professional-grade, multilingual | Paid |
+| **Tesseract OCR** | Open-source, command-line | Free |
+
+**Tesseract example:**
+```bash
+# Install (if needed)
+brew install tesseract  # macOS
+# or
+apt-get install tesseract-ocr  # Linux
+
+# Extract text
+tesseract book.pdf output.txt -l chi_tra+eng  # Chinese Traditional + English
+```
+
+---
+
+### Method 4: Online Sources (When You Don't Have PDF)
+
+**If user doesn't have PDF or it's unreadable:**
+
+1. **Search for clean text versions:**
+   - Project Gutenberg (public domain books)
+   - Standard Ebooks (beautifully formatted public domain)
+   - Author's official website (may have excerpts)
+   - Google Books (preview sections)
+
+2. **Library borrowing:**
+   - OverDrive/Libby (free with library card)
+   - Many libraries offer eBook lending
+
+3. **Purchase clean eBook:**
+   - Amazon Kindle (can convert with Calibre ⚠️ DRM issues)
+   - Kobo, Apple Books
+
+**⚠️ Important:** 
+- Always respect copyright
+- If user has physical book, help them find legitimate digital version
+- For skill purposes, even chapter summaries or detailed notes can work
+
+---
+
+### Validation Checklist
+
+After extracting text, **always validate:**
+
+```bash
+# 1. Check file size (should be substantial)
+wc -c book.txt
+
+# 2. Read first 100 lines — is it readable?
+head -100 book.txt
+
+# 3. Check for garbled characters
+grep -P '[\x{FFFD}\x{00}-\x{1F}]' book.txt | head -5
+
+# 4. Sample middle and end — consistent quality?
+sed -n '1000,1100p' book.txt
+tail -100 book.txt
+```
+
+**If text is garbled:**
+- Try different extraction method
+- Ask user if they have alternative source
+- Offer to help with OCR improvement
+
+---
+
+### Saving Extracted Text
+
+**Location:** `/tmp/{book-name}-full-text.txt`
+
+**Naming convention:**
+- Use lowercase, hyphens, no spaces
+- Include language if bilingual: `book-name-zh.txt`, `book-name-en.txt`
+
+**Example workflow:**
+```bash
+# 1. Extract
+pdftotext "/Volumes/External/ebook/灵性冲撞.pdf" "/tmp/jed-book2-spiritually-incorrect.txt"
+
+# 2. Validate
+wc -l /tmp/jed-book2-spiritually-incorrect.txt  # Should be thousands of lines
+head -50 /tmp/jed-book2-spiritually-incorrect.txt  # Readable?
+
+# 3. If good → proceed to knowledge map generation
+# 4. If bad → try Google Drive OCR or ask user for alternative
+```
 
 ---
 
